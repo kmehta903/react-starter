@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import List from './components/List.jsx';
+import Search from './components/Search.jsx';
+import axios from 'axios';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -11,23 +14,42 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    $.ajax({
-      url: '/items', 
-      success: (data) => {
-        this.setState({
-          items: data
-        })
-      },
-      error: (err) => {
-        console.log('err', err);
-      }
+  searchRestaurants(query) {
+    axios.post('/items', {
+      term: query
+    })
+    .then( (response) => {
+      //this.getSearchResults();
+      this.setState({
+        items: response.data
+      });
+    })
+    .catch(function(error) {
+      console.log(error);
     });
+  }
+
+  // getSearchResults() {
+  //   axios.get('/items') 
+  //   .then((response) => {
+  //     console.log('heresthedata:', response.data);
+  //     this.setState({
+  //       items: response.data
+  //     });
+  //   })
+  //   .catch((error) => {
+  //     console.log('err', error);
+  //   });
+  // }
+
+  componentDidMount() {
+    this.searchRestaurants('');
   }
 
   render () {
     return (<div>
-      <h1>Item List</h1>
+      <h1>Favorite Restaurant Finder</h1>
+      <Search searchRes={this.searchRestaurants.bind(this)} />
       <List items={this.state.items}/>
     </div>)
   }
