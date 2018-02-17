@@ -12,20 +12,44 @@ db.once('open', function() {
 });
 
 var restaurantSchema = mongoose.Schema({
-  quantity: Number,
-  description: String
+  name: String,
+  id: {type: Number, index: true}, //unique:true
+  url: String,
+  address: String
 });
 
 var Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
-var selectAll = function(callback) {
-  Restaurant.find({}, function(err, items) {
+let save = (restaurant) => {
+  Restaurant.findOneAndUpdate({id: restaurant.id},
+    {$set: {
+      name: restaurant.name,
+      id: restaurant.id,
+      url: restaurant.url,
+      address: restaurant.location.address
+      }
+    }, {upsert: true},
+    function(err, newRestaurant) {
+      if(err) {
+        console.log('error: ',err);
+      }
+    }
+  );
+};
+
+
+let selectAll = (cb) => {
+  Restaurant.
+  find().
+  sort().
+  exec(function(err, faves) {
     if(err) {
-      callback(err, null);
+      cb(err, null);
     } else {
-      callback(null, items);
+      cb(null, faves);
     }
   });
 };
 
+module.exports.save = save;
 module.exports.selectAll = selectAll;
