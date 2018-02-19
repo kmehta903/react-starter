@@ -1,5 +1,15 @@
 import React from 'react';
-
+import { Button } from 'semantic-ui-react';
+ const styles = {
+ 	button: {
+	borderColor: '#3498db',
+  color: '#fff',
+  boxShadow: '0 0 40px 40px #3498db inset,0 0 0 0 #3498db',
+	borderRadius: '10px'
+    // color: 'blue',
+    // background: 'black'
+  }
+ }
 class Search extends React.Component {
 	constructor(props) {
 		super(props);
@@ -22,7 +32,7 @@ class Search extends React.Component {
 		return (<div>
 			<h4>Search for restaurants!</h4>
 			Enter a keyword (e.g. pizza): <input value={this.state.query} onChange={this.onChange.bind(this)}/>
-			<button onClick={this.search.bind(this)}>Let's Eat!</button>
+			<button style={styles.button} onClick={this.search.bind(this)}>Let's Eat!</button>
 		</div>)
 	}
 }

@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 const zomato = require('../APIhelper/zomato.js')
-//var items = require('../database-mysql');
 var items = require('../database-mongo');
 var app = express();
 
@@ -10,6 +9,7 @@ app.use(bodyParser.json());
 
 app.post('/items', function (req, res) {
 	var query = req.body.term;
+
 	zomato.getRestaurants(query, (err,data) => {
 		if(err) {
 			res.sendStatus(500);
@@ -31,6 +31,14 @@ app.post('/data', function (req, res) {
 		});
 	});
 
+	res.statusCode=201;
+	res.end();
+});
+
+app.post('/remove', function (req, res) {
+	var removedElement = req.body.toBeRemoved;
+	console.log(removedElement);
+	items.remove(removedElement); 
 	res.statusCode=201;
 	res.end();
 });

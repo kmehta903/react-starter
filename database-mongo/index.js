@@ -29,12 +29,20 @@ let save = (restaurant) => {
       address: restaurant.location.address
       }
     }, {upsert: true},
-    function(err, newRestaurant) {
+    function(err) {
       if(err) {
         console.log('error: ',err);
       }
     }
   );
+};
+
+let remove = (restaurantID) => {
+  Restaurant.remove( {id: restaurantID}, function (err) {
+    if(err) {
+      console.log('error: ',err);
+    }
+  });
 };
 
 
@@ -52,4 +60,5 @@ let selectAll = (cb) => {
 };
 
 module.exports.save = save;
+module.exports.remove = remove;
 module.exports.selectAll = selectAll;

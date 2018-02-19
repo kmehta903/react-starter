@@ -9,7 +9,7 @@ const config = require('../config.js');
 let getRestaurants = (foodType, cb) => {
 
 let options = {
-	url: `https://developers.zomato.com/api/v2.1/search?q=${foodType}&lat=30.307182&lon=-97.755996&radius=2414.02&sort=real_distance&order=asc`,
+	url: `https://developers.zomato.com/api/v2.1/search?q=${foodType}&lat=30.2672399&lon=-97.7455875&radius=2414.02&sort=real_distance&order=asc`,
 	headers: {
 		'user-key': config.TOKEN
 	}
@@ -31,7 +31,19 @@ request(options, callback);
 }
 
 
+// function getLocation() {
+//     if (navigator.geolocation) {
+//         navigator.geolocation.getCurrentPosition(showPosition);
+//     } else { 
+//         console.log("Geolocation is not supported by this browser.");
+//     }
+// }
 
+// function showPosition(position) {
+//     console.log('HERE',position.coords.latitude, position.coords.longitude);
+// }
+
+// getLocation();
 
 
 

@@ -5,21 +5,32 @@ import List from './components/List.jsx';
 import Search from './components/Search.jsx';
 import DBList from './components/DBList.jsx';
 import axios from 'axios';
-//import {Button} from 'semantic-ui-react'
+//import 'semantic-ui-css/semantic.min.css';
+
 
 const styles = {
+
   header: {
-    color: 'blue'
+    color: 'black',
+    fontFamily: 'Helvetica Neue',
+    background: '#48b5e9',
+    color: 'black',
+    // background: '#466368',
+    // background: 'linear-gradient(#648880, #293f50)',
+    padding: '15px 15px'
   },
   random: {
-    color: 'red'
+    color: 'red',
+    fontSize: '18px'
   },
   searchCol: {
-    float: 'left'
+    float: 'left',
+    position: 'relative'
   },
   divCol: {
     float: 'left',
-    marginLeft: '4em', 
+    marginLeft: '3em',
+    position: 'relative'
   }
 }
 
@@ -66,7 +77,23 @@ class App extends React.Component {
       rawData: this.state.items
     })
     .then( (response) => {
-      console.log('data resp-->',response);
+      console.log('added to DB! -->',response);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+  }
+
+  removeFromDB(element) {
+    //e.preventDefault();
+    console.log('remove!', element);
+
+    axios.post('/remove', {
+      toBeRemoved: element
+    })
+    .then( (response) => {
+      this.showDB();
+      console.log('removed from DB! -->', response);
     })
     .catch(function(error) {
       console.log(error);
@@ -76,7 +103,6 @@ class App extends React.Component {
   showDB() {
     axios.get('/data')
     .then ((response) => {
-      console.log('respppp',response.data);
       this.setState({
         faves: response.data
       });
@@ -93,6 +119,9 @@ class App extends React.Component {
   }
 
   handleFormSubmit(e) {
+    if(this.results.length !==0) {
+      alert('Your selection(s) have been added to the database!');
+    }
     this.addToDB(this.results);
   }
  
@@ -107,14 +136,14 @@ class App extends React.Component {
     }
   }
 
+
   render () {
-    return (<div>
-      <h1 style={styles.header}>Favorite Restaurant Finder</h1>
-      
-      <div style={styles.searchCol}><Search searchRes={this.searchRestaurants.bind(this)} />
+    return (<div style={styles.header}>
+      <h1 >Favorite Restaurant Finder</h1>
+      <div style={styles.searchCol} ><Search searchRes={this.searchRestaurants.bind(this)} />
       <List items={this.state.items} toggleCheckbox={this.toggleCheckbox.bind(this)} handleFormSubmit={this.handleFormSubmit.bind(this)}/>
       </div>
-      <div style={styles.divCol}><DBList styles={styles} faves={this.state.faves} randomEntry={this.state.randomEntry} generateRandom={this.generateRandom.bind(this)} /></div>
+      <div style={styles.divCol}><DBList styles={styles} removeFromDB={this.removeFromDB.bind(this)} faves={this.state.faves} randomEntry={this.state.randomEntry} generateRandom={this.generateRandom.bind(this)} /></div>
     </div>)
   }
 }
